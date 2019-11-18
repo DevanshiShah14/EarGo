@@ -24,32 +24,43 @@ public class EargoBuySell {
 	 */
 
 	public void executeAndPrintResult(int[] arr) {
-		int result = buySellStock(arr);
-		System.out.println(String.format("Input : %s - max Profit: %s ", Arrays.toString(arr), result));
+		int[] result = buySellStock(arr);
+		System.out.println(String.format("Input : %s - Buying Day: %s, Selling Day: %s ", Arrays.toString(arr), result[0], result[1]));
 	}
 
 	/**
-	 * Helper method to return the max profit
+	 * Helper method to return the buy and sell day for max profit
 	 * 
 	 * @param arr
 	 * @return
 	 */
 
-	public int buySellStock(int[] arr) {
+	public int[] buySellStock(int[] arr) {
+		int[] BuySellarr = new int[2];
+		Arrays.fill(BuySellarr, -1);
 		if (arr.length == 0 || arr.length == 1)
-			return 0;
-
-		int buy = arr[0];
+			return BuySellarr;
+		
+		int buy = 0;
 		int maxProfit = Integer.MIN_VALUE;
 
 		for (int i = 1; i < arr.length; i++) {
-			if (buy < arr[i]) {
-				maxProfit = Math.max(maxProfit, arr[i] - buy);
-			} else if (buy > arr[i]) {
-				buy = arr[i];
+			if (arr[buy] < arr[i]) {
+				if(arr[i]-arr[buy] > maxProfit) {
+					BuySellarr[0] = buy+1;
+					BuySellarr[1] = i+1;
+					maxProfit = arr[i]-arr[buy];
+				}				
+			} else if (arr[buy]> arr[i]) {
+				buy = i;
 			}
 		}
-
-		return maxProfit == Integer.MIN_VALUE ? 0 : maxProfit;
+		
+		//Print max profit
+		if(maxProfit!= Integer.MIN_VALUE) {
+			System.out.println("Max Profit is: "+ maxProfit);
+		}
+		
+		return BuySellarr;
 	}
 }
